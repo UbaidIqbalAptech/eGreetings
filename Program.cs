@@ -1,9 +1,13 @@
 using eGreetings.Models;
-
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Home/SignIn";
+            options.LogoutPath = "/Home/Logout";
+        });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EGreetingsContext>(options =>
@@ -28,6 +32,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=MainView}/{id?}");
+    pattern: "{controller=Home}/{action=index}/{id?}");
 
 app.Run();

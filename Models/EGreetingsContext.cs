@@ -47,19 +47,19 @@ public partial class EGreetingsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("data source=.;initial catalog=E_greetings;user id=sa;password=aptech; TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("data source=.;initial catalog=E_greetings ;user id=sa;password=aptech; TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Admin>(entity =>
         {
-            entity.HasKey(e => e.AdminId).HasName("PK__admins__43AA414141690D1A");
+            entity.HasKey(e => e.AdminId).HasName("PK__admins__43AA41417C608C73");
 
             entity.ToTable("admins");
 
-            entity.HasIndex(e => e.Email, "UQ__admins__AB6E616427DD7F85").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__admins__AB6E61648FF31DDE").IsUnique();
 
-            entity.HasIndex(e => e.Username, "UQ__admins__F3DBC572E1F15B9C").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__admins__F3DBC572CF2AAD1B").IsUnique();
 
             entity.Property(e => e.AdminId).HasColumnName("admin_id");
             entity.Property(e => e.Email)
@@ -78,7 +78,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<CardDesign>(entity =>
         {
-            entity.HasKey(e => e.DesignId).HasName("PK__card_des__1BA5C3FB0E282DC9");
+            entity.HasKey(e => e.DesignId).HasName("PK__card_des__1BA5C3FB0876BDBF");
 
             entity.ToTable("card_designs");
 
@@ -103,7 +103,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__categori__D54EE9B418387999");
+            entity.HasKey(e => e.CategoryId).HasName("PK__categori__D54EE9B45B301514");
 
             entity.ToTable("categories");
 
@@ -119,7 +119,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<DesignElement>(entity =>
         {
-            entity.HasKey(e => e.ElementId).HasName("PK__design_e__388489FBE49536FB");
+            entity.HasKey(e => e.ElementId).HasName("PK__design_e__388489FBA78EDB87");
 
             entity.ToTable("design_elements");
 
@@ -148,7 +148,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.FeedbackId).HasName("PK__feedback__7A6B2B8C9D07CABD");
+            entity.HasKey(e => e.FeedbackId).HasName("PK__feedback__7A6B2B8C0D874616");
 
             entity.ToTable("feedback");
 
@@ -169,7 +169,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__notifica__E059842F5A38DADB");
+            entity.HasKey(e => e.NotificationId).HasName("PK__notifica__E059842F78BA5B8B");
 
             entity.ToTable("notifications");
 
@@ -199,11 +199,11 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<PaymentTransaction>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__payment___ED1FC9EADF910BD6");
+            entity.HasKey(e => e.PaymentId).HasName("PK__payment___ED1FC9EA1067B8F9");
 
             entity.ToTable("payment_transactions");
 
-            entity.HasIndex(e => e.TransactionId, "UQ__payment___85C600AEC9F57BCA").IsUnique();
+            entity.HasIndex(e => e.TransactionId, "UQ__payment___85C600AE665384D5").IsUnique();
 
             entity.Property(e => e.PaymentId).HasColumnName("payment_id");
             entity.Property(e => e.Amount)
@@ -231,7 +231,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__reports__779B7C58ED2A6917");
+            entity.HasKey(e => e.ReportId).HasName("PK__reports__779B7C581B644A25");
 
             entity.ToTable("reports");
 
@@ -247,7 +247,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Subscription>(entity =>
         {
-            entity.HasKey(e => e.SubscriptionId).HasName("PK__subscrip__863A7EC1AC0F73EA");
+            entity.HasKey(e => e.SubscriptionId).HasName("PK__subscrip__863A7EC1C682CADE");
 
             entity.ToTable("subscriptions");
 
@@ -272,7 +272,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<SystemLog>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__system_l__9E2397E018D34B81");
+            entity.HasKey(e => e.LogId).HasName("PK__system_l__9E2397E04B0E6B3A");
 
             entity.ToTable("system_logs");
 
@@ -297,11 +297,11 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Tag>(entity =>
         {
-            entity.HasKey(e => e.TagId).HasName("PK__tags__4296A2B61C489102");
+            entity.HasKey(e => e.TagId).HasName("PK__tags__4296A2B653E854F8");
 
             entity.ToTable("tags");
 
-            entity.HasIndex(e => e.TagName, "UQ__tags__E298655C2F9B6EAA").IsUnique();
+            entity.HasIndex(e => e.TagName, "UQ__tags__E298655C1D69EFA6").IsUnique();
 
             entity.Property(e => e.TagId).HasColumnName("tag_id");
             entity.Property(e => e.TagName)
@@ -312,7 +312,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Template>(entity =>
         {
-            entity.HasKey(e => e.TemplateId).HasName("PK__template__BE44E079DEA37EF9");
+            entity.HasKey(e => e.TemplateId).HasName("PK__template__BE44E079A7054490");
 
             entity.ToTable("templates");
 
@@ -346,7 +346,7 @@ public partial class EGreetingsContext : DbContext
                         .HasConstraintName("FK__template___templ__5535A963"),
                     j =>
                     {
-                        j.HasKey("TemplateId", "TagId").HasName("PK__template__CA6D8A52CE8EA78C");
+                        j.HasKey("TemplateId", "TagId").HasName("PK__template__CA6D8A5246852F38");
                         j.ToTable("template_tags");
                         j.IndexerProperty<int>("TemplateId").HasColumnName("template_id");
                         j.IndexerProperty<int>("TagId").HasColumnName("tag_id");
@@ -355,7 +355,7 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__transact__85C600AF8EF45962");
+            entity.HasKey(e => e.TransactionId).HasName("PK__transact__85C600AFE51DBFAA");
 
             entity.ToTable("transactions");
 
@@ -382,13 +382,11 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370F97C6B4D6");
+            entity.HasKey(e => e.UserId).HasName("PK__users__B9BE370F94D50277");
 
             entity.ToTable("users");
 
-            entity.HasIndex(e => e.Email, "UQ__users__AB6E61642D18916B").IsUnique();
-
-            entity.HasIndex(e => e.Username, "UQ__users__F3DBC57245782587").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__users__AB6E616464056905").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Email)
@@ -421,7 +419,7 @@ public partial class EGreetingsContext : DbContext
                         .HasConstraintName("FK__user_role__user___5BE2A6F2"),
                     j =>
                     {
-                        j.HasKey("UserId", "RoleId").HasName("PK__user_rol__6EDEA1530A121DE3");
+                        j.HasKey("UserId", "RoleId").HasName("PK__user_rol__6EDEA15384BDA5FB");
                         j.ToTable("user_role_assignments");
                         j.IndexerProperty<int>("UserId").HasColumnName("user_id");
                         j.IndexerProperty<int>("RoleId").HasColumnName("role_id");
@@ -430,11 +428,11 @@ public partial class EGreetingsContext : DbContext
 
         modelBuilder.Entity<UserRole>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__user_rol__760965CCD486A95E");
+            entity.HasKey(e => e.RoleId).HasName("PK__user_rol__760965CC35748B14");
 
             entity.ToTable("user_roles");
 
-            entity.HasIndex(e => e.RoleName, "UQ__user_rol__783254B1C647FC54").IsUnique();
+            entity.HasIndex(e => e.RoleName, "UQ__user_rol__783254B136E37E49").IsUnique();
 
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.Description)

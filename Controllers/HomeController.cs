@@ -1,10 +1,15 @@
 ﻿using System.Diagnostics;
-
 using eGreetings.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 namespace eGreetings.Controllers
 {
     public class HomeController : Controller
@@ -56,11 +61,11 @@ namespace eGreetings.Controllers
 		}
 
 
-		public IActionResult GetUsers()
-		{
-			var users = _context.Users.ToList(); 
-			return Json(users);
-		}
+		//public IActionResult GetUsers()
+		//{
+		//	var users = _context.Users.ToList(); 
+		//	return Json(users);
+		//}
 
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -130,6 +135,92 @@ namespace eGreetings.Controllers
 			}
 			return BadRequest(ModelState);
 		}
-     
+
+		//Register login
+		[HttpGet]
+        public IActionResult SignUp()
+		{
+			return View();
+		}
+		
+        //get login
+        public IActionResult SignIn()
+		{
+			return View();
+		}
+
+        [HttpPost]
+        public async Task<IActionResult> SignUp(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+                {
+
+					return RedirectToAction("SignUp", "Home");
+				}
+
+               
+                user.RegistrationDate = DateTime.Now;
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                await SignInUser(user);//
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("SignUp", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(string email, string password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+            if (user != null)
+            {
+                await SignInUser(user);
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private async Task SignInUser(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()) // Add User ID claim
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+        }
+
+
+
+
+
+
+
+
+
     }
 }
