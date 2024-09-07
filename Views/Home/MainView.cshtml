@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Layout</title>
+  
+     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+   
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+        /* Adjustments to the sidebar */
+/*            .sidebar {
+               height: 100vh;
+               background-color: #f8f9fa;
+           }
+ */    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <h1>Header Section</h1>
+        </div>
+    </header>
+
+    <!-- Main Content Area with Sidebar -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <h2>Sidebar</h2>
+                <!-- Sidebar Content Goes Here -->
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a class="btn btn-primary disabled d-none" onclick="showPartialView('partialView1')">Show Partial View 1</a>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-primary" onclick="showPartialView('partialView2')">Show Partial View 2</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-primary btn-block" onclick="showPartialView('partialView3')">Show Partial View 3</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <h2>Main Content Area</h2>
+                <div id="partialView1" style="display: none;" class="partial-view">
+                    <div id="partialViewContainer"></div>
+                </div>
+                <div id="partialView2" style="display: none;" class="partial-view">
+                    @Html.Partial("_PartialView2")
+                </div>
+                <div id="partialView3" style="display: none;" class="partial-view">
+                    @Html.Partial("_PartialView3")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white p-3 mt-4">
+        <div class="container">
+            <h3>Footer Section</h3>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <!-- JavaScript -->
+    <script>
+        function showPartialView(viewId) {
+            $(".partial-view").hide();
+            $("#" + viewId).show();
+            loadPartialView();
+    
+        }
+
+        function loadPartialView() {
+            $.ajax({
+                url: '/Home/GetUsers',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var tableHtml = '<table class="table"><thead><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Password</th><th>Actions</th></tr></thead><tbody>';
+                    $.each(data, function (index, Users) {
+                        tableHtml += '<tr><td>' + Users.UserId + '</td><td>' + Users.Username + '</td><td>' + Users.Email + '</td><td>' + Users.FirstName + '</td><td>' + Users.LastName + '</td><td read only>' + Users.Password + '</td>';
+                        tableHtml += '<td><button class="btn-edit btn btn-info" data-id="' + Users.UserId + '">Edit</button> <button class="btn-delete btn btn-danger" data-id="' + Users.UserId + '">Delete</button></td></tr>';
+                    }) ;
+                    tableHtml += '</tbody></table>';
+                    $('#partialViewContainer').html(tableHtml);
+
+                    // Add event listener for edit button
+                    $(document).on('click', '.btn-edit', function () {
+                        var row = $(this).closest('tr');
+                        if (!row.hasClass('editing')) {
+                            row.addClass('editing');
+                            row.find('td:not(:first-child):not(:last-child)').each(function () {
+                                var currentValue = $(this).text();
+                                $(this).html('<input type="text" class="form-control" value="' + currentValue + '">');
+                            });
+
+                            // Replace edit button with save button
+                            $(this).removeClass('btn-info').addClass('btn-save btn-success').text('Save');
+
+                            // Hide delete button
+                            row.find('.btn-delete').hide();
+                        }
+                    });
+
+                    // Add event listener for save button (delegated)
+                    $(document).on('click', '.btn-save', function () {
+                        var row = $(this).closest('tr');
+                        var userId = $(this).data('user_id');
+                        var updatedUser = {
+                            id: user_id,
+                            username: row.find('td:eq(1) input').val(),
+                            email: row.find('td:eq(2) input').val(),
+                            password: row.find('td:eq(3) input').val(),
+                            first_name: row.find('td:eq(4) input').val(),
+                            last_name: row.find('td:eq(5) input').val(),
+                            
+                        };
+
+                        // Log the data being sent
+                        console.log('Sending updated user data:', updatedUser);
+
+                        // AJAX request to save the updated user data
+                        $.ajax({
+                            url: 'https://localhost:7234/Home/UpdateUser', // Ensure this URL is correct
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(updatedUser),
+                            success: function (response) {
+                                row.removeClass('editing');
+                                row.find('td:not(:first-child):not(:last-child)').each(function (index) {
+                                    var input = $(this).find('input');
+                                    var newValue = input.val();
+                                    $(this).text(newValue);
+                                });
+
+                                // Replace save button with edit button
+                                row.find('.btn-save').removeClass('btn-save btn-success').addClass('btn-edit btn-info').text('Edit');
+
+                                // Show delete button
+                                row.find('.btn-delete').show();
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error updating user:', error);
+                                console.error('Response:', xhr.responseText);
+                            }
+                        });
+                    });
+
+                    // Add event listener for delete button
+                    $(document).on('click', '.btn-delete', function () {
+                        var userId = $(this).data('user_id');
+                        deleteUser(userId);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
+
+
+        function deleteUser(userId) {
+            $.ajax({
+                url: '/Home/DeleteUser',
+                type: 'POST',
+                data: { id: userId },
+                success: function () {
+                    loadPartialView();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            // Load the initial partial view
+            loadPartialView();
+        });
+        
+    </script>
+
+
+</body>
+</html>

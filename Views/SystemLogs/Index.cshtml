@@ -1,0 +1,53 @@
+﻿@model IEnumerable<eGreetings.Models.SystemLog>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LogDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LogLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LogDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LogLevel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LogId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LogId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LogId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

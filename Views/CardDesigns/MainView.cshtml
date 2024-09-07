@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Layout</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Sidebar Item Hover Effect */
+        .list-group-item {
+            cursor: pointer; /* Makes the list item appear clickable */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+        }
+
+            .list-group-item:hover {
+                background-color: #e9ecef; /* Light gray background on hover */
+                color: #007bff; /* Change text color on hover */
+            }
+
+            .list-group-item.active {
+                background-color: #007bff; /* Blue background when active */
+                color: white; /* White text when active */
+            }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <h1>Header Section</h1>
+        </div>
+    </header>
+
+    <!-- Main Content Area with Sidebar -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 sidebar">
+                <h2>Sidebar</h2>
+                <!-- Sidebar Content Goes Here -->
+                <ul id="sidebar-content" class="list-group">
+                    <!-- Options will be injected here by JavaScript -->
+                </ul>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-md-9">
+                <h2>Cards Designs</h2>
+                <div id="cardview" style="display: none;" class="card-view">
+                    <div id="cardViewContainer"></div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="button" class="btn btn-primary" onclick="updateSidebar('celebration')">Celebration</button>
+                    <button type="button" class="btn btn-primary" onclick="updateSidebar('festival')">Festival</button>
+                    <button type="button" class="btn btn-primary" onclick="updateSidebar('miscellaneous')">Miscellaneous</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white p-3 mt-4">
+        <div class="container">
+            <h3>Footer Section</h3>
+        </div>
+    </footer>
+
+    <script>
+        function updateSidebar(category) {
+            const sidebarContent = document.getElementById('sidebar-content');
+            sidebarContent.innerHTML = ''; // Clear existing content
+
+            const options = {
+                celebration: ['Fathers Day', 'Mothers Day', 'Teachers Day', 'Independence Day', 'New Year', 'Defence Day',
+                    'Pakistan Day', 'Republic Day', 'Iqbal Day', 'Kashmir Day', 'Quaid-e-Azam Day', 'FriendShip Day'],
+                festival: ['Eid - Ul - Fitr', 'Eid-Ul-Adha', 'Chand Raat', 'Iftar Party'],
+                miscellaneous: ['BirthDay', 'Happy Anniversary', 'Work Anniversary', 'Get Well Soon', 'Congratulations', 'Thank You',
+                    'Retirement', 'Welcome', 'Sorry', 'Wedding']
+            };
+
+            const categoryOptions = options[category] || [];
+            categoryOptions.forEach(option => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item';
+                listItem.textContent = option;
+                listItem.onclick = function () {
+                    // Remove 'active' class from previously selected item
+                    document.querySelectorAll('.list-group-item').forEach(item => item.classList.remove('active'));
+
+                    // Add 'active' class to the clicked item
+                    this.classList.add('active');
+                    displayCards(option);
+                };
+                sidebarContent.appendChild(listItem);
+            });
+        }
+
+                                           
+    </script>
+</body>
+</html>
