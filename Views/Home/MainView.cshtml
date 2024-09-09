@@ -11,12 +11,11 @@
    
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
-        /* Adjustments to the sidebar */
-/*            .sidebar {
+           .sidebar {
                height: 100vh;
                background-color: #f8f9fa;
            }
- */    </style>
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -31,24 +30,24 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 sidebar">
-                <h2>Sidebar</h2>
+        @*         <h2>Sidebar</h2> *@
                 <!-- Sidebar Content Goes Here -->
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <a class="btn btn-primary disabled d-none" onclick="showPartialView('partialView1')">Show Partial View 1</a>
+                        <a class="btn btn-danger disabled d-none" onclick="showPartialView('partialView1')">View</a>
                     </li>
                     <li class="list-group-item">
-                        <button class="btn btn-primary" onclick="showPartialView('partialView2')">Show Partial View 2</button>
+                        <button class="btn btn-danger btn-block" onclick="showPartialView('partialView2')">Register Users</button>
                     </li>
                     <li class="list-group-item">
-                        <button class="btn btn-primary btn-block" onclick="showPartialView('partialView3')">Show Partial View 3</button>
+                        <button class="btn btn-danger btn-block" id="viewusers">See Registered Users</button>
                     </li>
                 </ul>
             </div>
 
             <!-- Main Content Area -->
-            <div class="col-md-9">
-                <h2>Main Content Area</h2>
+            @* <div class="col-md-9">
+                <h2 class="text-center">WELCOME</h2>
                 <div id="partialView1" style="display: none;" class="partial-view">
                     <div id="partialViewContainer"></div>
                 </div>
@@ -56,8 +55,50 @@
                     @Html.Partial("_PartialView2")
                 </div>
                 <div id="partialView3" style="display: none;" class="partial-view">
-                    @Html.Partial("_PartialView3")
+                    @Html.Partial("_ViewUsersPartial")
                 </div>
+            </div> *@
+
+            <div class="col-md-9" id="adminContent">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@* 
+                @if (TempData.ContainsKey("LoadCategoryIndex") && TempData["LoadCategoryIndex"].Equals(true))
+                {
+                    <script>
+                        $(document).ready(function () {
+                            var categoryIndexUrl = '@Url.Action("Index", "Categories")';
+                            $('#adminContent').load(categoryIndexUrl);
+                        });
+                    </script>
+                } *@
+@* 
+                @if (TempData.ContainsKey("LoadProducts") && TempData["LoadProducts"].Equals(true))
+                {
+                    <script>
+                        $(document).ready(function () {
+                            var viewProductsUrl = '@Url.Action("ViewProductsPartial", "Admin")';
+                            $('#adminContent').load(viewProductsUrl);
+                        });
+                    </script>
+                } *@
+               @*  @if (TempData.ContainsKey("LoadUser") && TempData["LoadUser"].Equals(true))
+                {
+                    <script>
+                        $(document).ready(function () {
+                            var viewUserUrl = '@Url.Action("Index", "Users")';
+                            $('#adminContent').load(viewUserUrl);
+                        });
+                    </script>
+                } *@
+               @*  @if (TempData.ContainsKey("LoadAddress") && TempData["LoadAddress"].Equals(true))
+                {
+                    <script>
+                        $(document).ready(function () {
+                            var viewAddressUrl = '@Url.Action("Index", "Addresses")';
+                            $('#adminContent').load(viewAddressUrl);
+                        });
+                    </script>
+                } *@
             </div>
         </div>
     </div>
@@ -85,9 +126,9 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var tableHtml = '<table class="table"><thead><tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Password</th><th>Actions</th></tr></thead><tbody>';
+                    var tableHtml = '<table class="table"><thead><tr><th>ID</th><th>Email</th><th>Actions</th></tr></thead><tbody>';
                     $.each(data, function (index, Users) {
-                        tableHtml += '<tr><td>' + Users.UserId + '</td><td>' + Users.Username + '</td><td>' + Users.Email + '</td><td>' + Users.FirstName + '</td><td>' + Users.LastName + '</td><td read only>' + Users.Password + '</td>';
+                        tableHtml += '<tr><td>' + Users.UserId + '</td><td>' + Users.Username + '</td><td>' + Users.Email + '</td>;
                         tableHtml += '<td><button class="btn-edit btn btn-info" data-id="' + Users.UserId + '">Edit</button> <button class="btn-delete btn btn-danger" data-id="' + Users.UserId + '">Delete</button></td></tr>';
                     }) ;
                     tableHtml += '</tbody></table>';
@@ -191,6 +232,54 @@
         });
         
     </script>
+
+    @section scripts {
+        <script>
+            $(document).ready(function () {
+                $('#viewusers').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("ViewUsersPartial", "Home")');
+                });
+
+                $('#viewProductsLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("ViewProductsPartial", "Admin")');
+                });
+
+                // Category section
+                $('#addCategoryLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Create", "Categories")');
+                });
+
+                $('#viewCategoryLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Index", "Categories")');
+                });
+                //user
+                $('#addUserLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Create", "Users")');
+                });
+
+                $('#viewUserLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Index", "Users")');
+                });
+                //Address
+                $('#addAddressLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Create", "Addresses")');
+                });
+
+                $('#viewAddressLink').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("Index", "Addresses")');
+                });
+                // Add similar click handlers for other admin actions
+            });
+        </script>
+    }
 
 
 </body>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<eGreetings.Models.User>
+
+<h2>All Registered Users</h2>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var users in Model)
+            {
+                <tr>
+                    <td>@users.Username</td>
+                    <td>@users.Email</td>
+                    <td>@users.RegistrationDate?.ToString("MM/dd/yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

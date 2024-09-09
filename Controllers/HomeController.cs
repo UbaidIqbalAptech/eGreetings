@@ -61,14 +61,14 @@ namespace eGreetings.Controllers
 		}
 
 
-		//public IActionResult GetUsers()
-		//{
-		//	var users = _context.Users.ToList(); 
-		//	return Json(users);
-		//}
+        public IActionResult ViewUsersPartial()
+        {
+            var user = _context.Users.ToList();
+            return PartialView("_ViewUsersPartial", user);
+        }
 
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
