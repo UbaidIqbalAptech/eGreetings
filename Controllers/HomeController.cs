@@ -66,7 +66,18 @@ namespace eGreetings.Controllers
             var user = _context.Users.ToList();
             return PartialView("_ViewUsersPartial", user);
         }
-
+  //      public async IActionResult UploadTemplateImage(Template image)
+		//{
+		//	if (ModelState.IsValid)
+		//	{
+				 
+		//	}
+		//}
+    public IActionResult ShowFeedPartial()
+        {
+            var Feedback = _context.Feedbacks.ToList();
+            return PartialView("_ShowFeedPartial", Feedback);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()

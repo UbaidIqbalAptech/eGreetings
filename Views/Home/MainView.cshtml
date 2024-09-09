@@ -42,6 +42,9 @@
                     <li class="list-group-item">
                         <button class="btn btn-danger btn-block" id="viewusers">See Registered Users</button>
                     </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="viewfeedbacks">See Users Feedback</button>
+                    </li>
                 </ul>
             </div>
 
@@ -241,9 +244,9 @@
                     $('#adminContent').load('@Url.Action("ViewUsersPartial", "Home")');
                 });
 
-                $('#viewProductsLink').click(function (e) {
+                $('#viewfeedbacks').click(function (e) {
                     e.preventDefault();
-                    $('#adminContent').load('@Url.Action("ViewProductsPartial", "Admin")');
+                    $('#adminContent').load('@Url.Action("ShowFeedPartial", "Home")');
                 });
 
                 // Category section
