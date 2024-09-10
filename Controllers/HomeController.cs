@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 namespace eGreetings.Controllers
 {
     public class HomeController : Controller
@@ -42,6 +40,7 @@ namespace eGreetings.Controllers
 			return View();
 		}
 
+
 		[HttpPost]
 		public IActionResult Register(User user)
 		{
@@ -59,7 +58,22 @@ namespace eGreetings.Controllers
 
 			return RedirectToAction("MainView");
 		}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddCategoryPartial(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
 
+                TempData["AlertMessage"] = "Category added successfully!";
+                return RedirectToAction("MainView"); // Redirect to the desired action/view
+            }
+
+            TempData["AlertMessage"] = "Failed to add category. Please check your input and try again.";
+            return PartialView("_AddCategoryPartial", category); // Return the partial view with the current model
+        }
 
         public IActionResult ViewUsersPartial()
         {
@@ -78,6 +92,124 @@ namespace eGreetings.Controllers
             var Feedback = _context.Feedbacks.ToList();
             return PartialView("_ShowFeedPartial", Feedback);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> AddTemplatePartial(Template template, IFormFile imageFile)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (imageFile != null && imageFile.Length > 0)
+        //        {
+        //            using (var memoryStream = new MemoryStream())
+        //            {
+        //                await imageFile.CopyToAsync(memoryStream);
+        //                template.Image = memoryStream.ToArray();
+        //            }
+        //        }
+
+        //        _context.Templates.Add(template);
+        //        await _context.SaveChangesAsync();
+
+        //        TempData["AlertMessage"] = "Template uploaded successfully!";
+        //        return RedirectToAction("MainView");
+        //    }
+
+        //    TempData["AlertMessage"] = "Failed to upload template. Please check your input and try again.";
+        //    return RedirectToAction("MainView");
+        //}
+       
+            // Action to load the list of feedback
+          
+
+        public IActionResult AddCategoryPartial()
+        {
+            return PartialView("_AddCategoryPartial", new Category());
+        }
+
+        // Action to handle form submission
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Add(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("MainView"); // or another action as needed
+            }
+
+            return PartialView("_AddCategoryPartial", category);
+        }
+
+        public IActionResult CategoryListPartial()
+        {
+            var categories = _context.Categories.ToList(); // Fetch categories from the database
+            return PartialView("_CategoryListPartial", categories);
+        }
+        public IActionResult FeedbackList()
+        {
+            // Replace this with your actual data retrieval logic
+            var Feedback = _context.Feedbacks.ToList();
+            return PartialView("_ShowFeedPartial", Feedback);
+
+        }
+        public IActionResult UserListPartial()
+        {
+            var users = _context.Users.ToList(); // Fetch users from the database
+            return PartialView("_UserListPartial", users);
+        }
+        [HttpGet]
+        public IActionResult AddUserPartial()
+        {
+            return PartialView("_AddUserPartial", new User());
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                TempData["AlertMessage"] = "User data saved successfully!";
+            }
+            else
+            {
+                TempData["AlertMessage"] = "Failed to save user data. Please check your input and try again.";
+            }
+
+            return RedirectToAction("MainView");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTemplatePartial(Template template, IFormFile imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await imageFile.CopyToAsync(memoryStream);
+                        template.Image = memoryStream.ToArray();
+                    }
+                }
+
+                _context.Templates.Add(template);
+                await _context.SaveChangesAsync();
+
+                TempData["AlertMessage"] = "Template uploaded successfully!";
+                return RedirectToAction("MainView"); // Or another action as needed
+            }
+
+            TempData["AlertMessage"] = "Failed to upload template. Please check your input and try again.";
+            return PartialView("_AddTemplatePartial", template);
+        }
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()

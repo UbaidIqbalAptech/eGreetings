@@ -24,29 +24,59 @@
             <h1>Header Section</h1>
         </div>
     </header>
-
-    <!-- Main Content Area with Sidebar -->
-    <div class="container-fluid mt-4">
+      <div class="container-fluid mt-4">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 sidebar">
-        @*         <h2>Sidebar</h2> *@
-                <!-- Sidebar Content Goes Here -->
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a class="btn btn-danger disabled d-none" onclick="showPartialView('partialView1')">View</a>
-                    </li>
-                    <li class="list-group-item">
-                        <button class="btn btn-danger btn-block" onclick="showPartialView('partialView2')">Register Users</button>
-                    </li>
+               @*  <ul class="list-group">
                     <li class="list-group-item">
                         <button class="btn btn-danger btn-block" id="viewusers">See Registered Users</button>
                     </li>
                     <li class="list-group-item">
                         <button class="btn btn-danger btn-block" id="viewfeedbacks">See Users Feedback</button>
                     </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="addtemplates">Add Templates</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="addCategory">Add Category</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="viewUserLink">View Users</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="addAddressLink">Add Address</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button class="btn btn-danger btn-block" id="viewAddressLink">View Addresses</button>
+                    </li>
+                </ul> *@
+                <!-- Button to load feedback list -->
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <button id="addUser" class="btn btn-danger btn-block">Register Users</button>
+                    </li>
+                    <li class="list-group-item">
+                        <button id="viewUsersBtn" class="btn btn-danger btn-block">View Users</button>
+                    </li>
+                    <li class="list-group-item">
+                     <button id="viewFeedbacks" class="btn btn-danger btn-block">View Feedbacks</button>
+                 </li>
+                    <li class="list-group-item">
+                        <button id="addCategoryBtn" class="btn btn-danger btn-block">Add Category</button>
+                 </li>
+                    <li class="list-group-item">
+                        <button id="viewCategoriesBtn" class="btn btn-danger btn-block">View Categories</button>
+                 </li>
+                   
+               @*      <li class="list-group-item">
+                        <button id="addTemplateBtn" class="btn btn-danger btn-block">Add Template</button>
+                    </li> *@
+                    
+                   
                 </ul>
             </div>
+
 
             <!-- Main Content Area -->
             @* <div class="col-md-9">
@@ -64,6 +94,8 @@
 
             <div class="col-md-9" id="adminContent">
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                @Html.Partial("_AddTemplatePartial", new eGreetings.Models.Template())
+
 @* 
                 @if (TempData.ContainsKey("LoadCategoryIndex") && TempData["LoadCategoryIndex"].Equals(true))
                 {
@@ -228,7 +260,6 @@
             });
         }
 
-
         $(document).ready(function () {
             // Load the initial partial view
             loadPartialView();
@@ -237,51 +268,94 @@
     </script>
 
     @section scripts {
-        <script>
+      @*   <script>
             $(document).ready(function () {
-                $('#viewusers').click(function (e) {
+                $('#viewusers').on('click', function (e) {
                     e.preventDefault();
                     $('#adminContent').load('@Url.Action("ViewUsersPartial", "Home")');
                 });
 
-                $('#viewfeedbacks').click(function (e) {
+                $('#viewfeedbacks').on('click', function (e) {
                     e.preventDefault();
                     $('#adminContent').load('@Url.Action("ShowFeedPartial", "Home")');
                 });
 
-                // Category section
-                $('#addCategoryLink').click(function (e) {
+                $('#addtemplates').on('click', function (e) {
                     e.preventDefault();
-                    $('#adminContent').load('@Url.Action("Create", "Categories")');
+                    $('#adminContent').load('@Url.Action("AddTemplatePartial", "Home")');
                 });
 
-                $('#viewCategoryLink').click(function (e) {
+                $('#partialView2').on('click', function (e) {
                     e.preventDefault();
-                    $('#adminContent').load('@Url.Action("Index", "Categories")');
-                });
-                //user
-                $('#addUserLink').click(function (e) {
-                    e.preventDefault();
-                    $('#adminContent').load('@Url.Action("Create", "Users")');
+                    $('#adminContent').load('@Url.Action("ViewUsersPartial", "Home")');
                 });
 
-                $('#viewUserLink').click(function (e) {
+                $('#addCategory').on('click', function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("AddCategoryPartial", "Home")');
+                });
+
+                $('#viewUserLink').on('click', function (e) {
                     e.preventDefault();
                     $('#adminContent').load('@Url.Action("Index", "Users")');
                 });
-                //Address
-                $('#addAddressLink').click(function (e) {
+
+                $('#addAddressLink').on('click', function (e) {
                     e.preventDefault();
                     $('#adminContent').load('@Url.Action("Create", "Addresses")');
                 });
 
-                $('#viewAddressLink').click(function (e) {
+                $('#viewAddressLink').on('click', function (e) {
                     e.preventDefault();
                     $('#adminContent').load('@Url.Action("Index", "Addresses")');
                 });
-                // Add similar click handlers for other admin actions
             });
+        </script> *@
+        <script>
+            $(document).ready(function () {
+                $('#addUser').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("AddUserPartial", "Home")');
+                });
+            });
+            $(document).ready(function () {
+                $('#viewUsersBtn').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("UserListPartial", "Home")');
+                });
+            });
+            $(document).ready(function () {
+                $('#viewFeedbacks').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("FeedbackList", "Home")');
+                });
+            });
+
+            $(document).ready(function () {
+                $('#addCategoryBtn').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("AddCategoryPartial", "Home")');
+                });
+            });
+
+            $(document).ready(function () {
+                $('#viewCategoriesBtn').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("CategoryListPartial", "Home")');
+                });
+            });
+
+            $(document).ready(function () {
+                $('#addTemplateBtn').click(function (e) {
+                    e.preventDefault();
+                    $('#adminContent').load('@Url.Action("AddTemplatePartial", "Home")');
+                });
+            });
+
+
+
         </script>
+
     }
 
 

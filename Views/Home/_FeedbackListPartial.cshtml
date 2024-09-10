@@ -1,0 +1,25 @@
+﻿@model IEnumerable<eGreetings.Models.Feedback>
+
+<h2>Feedback List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Feedback ID</th>
+            <th>User ID</th>
+            <th>Date</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model)
+        {
+            <tr>
+                <td>@feedback.FeedbackId</td>
+                <td>@feedback.UserId</td>
+                <td>@feedback.FeedbackDate?.ToString("MM/dd/yyyy")</td>
+                <td>@feedback.Message</td>
+            </tr>
+        }
+    </tbody>
+</table>
